@@ -1,6 +1,7 @@
-// app-ps5.js — mismo comportamiento para PS5 (muestra ejemplos)
+// app-ps5.js — mismo comportamiento para PS5
 const WHATSAPP_NUMBER = "573053727045";
-const PLATFORM = "PS5";
+const PUBLIC_ORIGIN   = "https://gamersvupzona-spec.github.io/Tienda";
+const PLATFORM        = "PS5";
 
 const isMobile = /Android|iPhone|iPad|iPod|Windows Phone|Mobi/i.test(navigator.userAgent);
 const waUrlSmart = (text) => {
@@ -10,9 +11,32 @@ const waUrlSmart = (text) => {
     : `https://web.whatsapp.com/send?phone=${WHATSAPP_NUMBER}&text=${t}`;
 };
 
+const toPublicUrl = (src) => src?.startsWith("http") ? src : new URL(src, PUBLIC_ORIGIN + "/").href;
+
+function imgOk(url) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    let done = false;
+    const end = (ok) => { if (!done) { done = true; resolve(!!ok); } };
+    const timer = setTimeout(() => end(false), 6000);
+    img.onload  = () => { clearTimeout(timer); end(img.naturalWidth > 0); };
+    img.onerror = () => { clearTimeout(timer); end(false); };
+    img.src = url;
+  });
+}
+
+async function keepOnlyWithImage(list) {
+  const tested = await Promise.all(list.map(async (p) => {
+    if (!p.image) return null;
+    const url = toPublicUrl(p.image);
+    const ok  = await imgOk(url);
+    return ok ? { ...p, __imgUrl: url } : null;
+  }));
+  return tested.filter(Boolean);
+}
+
 const DB = window.PRODUCTS || [];
 
-// DOM
 const $gridInd    = document.getElementById("grid-individual");
 const $gridCombo  = document.getElementById("grid-combos");
 const $emptyInd   = document.getElementById("empty-individual");
@@ -21,15 +45,12 @@ const $search     = document.getElementById("search");
 const $ctaWa      = document.getElementById("cta-wa");
 const $waFab      = document.getElementById("wa-fab");
 
-// Utils
 const fmtCOP = new Intl.NumberFormat("es-CO",{style:"currency",currency:"COP",maximumFractionDigits:0});
 
 const baseHola = "Hola, quiero más información.";
 if ($ctaWa) $ctaWa.href = waUrlSmart(baseHola);
 if ($waFab) $waFab.href = waUrlSmart(baseHola);
-
-const $year = document.getElementById("year");
-if ($year) $year.textContent = new Date().getFullYear();
+document.getElementById("year")?.replaceChildren(new Date().getFullYear());
 
 console.log("PS5 | total:", DB.length,
   "| indiv:", DB.filter(p=>p.platform===PLATFORM && p.packType==="individual").length,
@@ -40,21 +61,14 @@ let q = "";
 render();
 $search?.addEventListener("input", e => { q = e.target.value.trim().toLowerCase(); render(); });
 
-// Render que excluye productos sin imagen
-function render(){
-  const ind  = DB.filter(p =>
-    p.platform === PLATFORM &&
-    p.packType === "individual" &&
-    p.title.toLowerCase().includes(q) &&
-    p.image && p.image.trim() !== ""
-  ).slice(0, 10);
+async function render(){
+  const baseInd  = DB.filter(p => p.platform===PLATFORM && p.packType==="individual" && p.title.toLowerCase().includes(q)).slice(0, 10);
+  const baseComb = DB.filter(p => p.platform===PLATFORM && p.packType==="combo"      && p.title.toLowerCase().includes(q)).slice(0, 10);
 
-  const comb = DB.filter(p =>
-    p.platform === PLATFORM &&
-    p.packType === "combo" &&
-    p.title.toLowerCase().includes(q) &&
-    p.image && p.image.trim() !== ""
-  ).slice(0, 10);
+  const [ind, comb] = await Promise.all([
+    keepOnlyWithImage(baseInd),
+    keepOnlyWithImage(baseComb)
+  ]);
 
   paint(ind,  $gridInd,  $emptyInd);
   paint(comb, $gridCombo, $emptyCombo);
@@ -72,35 +86,19 @@ function paint(list, $grid, $empty){
   $empty.hidden = true;
   $grid.innerHTML = list.map(cardHTML).join("");
 
-  // Quitar tarjetas si la imagen falla
-  attachImageGuards($grid, $empty);
-
-  // Botón WhatsApp
   list.forEach(p => {
     $grid.querySelector(`button[data-id="${p.id}"]`)
       ?.addEventListener("click", () => wa(p));
   });
 }
 
-function attachImageGuards($grid, $empty){
-  const imgs = $grid.querySelectorAll("img");
-  imgs.forEach(img => {
-    const remove = () => {
-      const card = img.closest(".card");
-      card?.remove();
-      if ($grid.children.length === 0) $empty.hidden = false;
-    };
-    img.addEventListener("error", remove, { once:true });
-    if (img.complete && img.naturalWidth === 0) remove();
-  });
-}
-
 function cardHTML(p){
   const isCombo = p.packType === "combo";
   const itemsLine = isCombo && p.items?.length ? `Incluye: ${p.items.join(", ")}` : "";
+  const src = p.__imgUrl || toPublicUrl(p.image);
   return `
     <article class="card" id="${p.id}">
-      <img src="${p.image}" alt="${p.title}" loading="lazy" />
+      <img src="${src}" alt="${p.title}" loading="lazy" />
       <div class="info">
         <div class="title">${p.title}</div>
         <div class="tags">
@@ -119,11 +117,11 @@ function cardHTML(p){
 function wa(p){
   const isCombo = p.packType==="combo";
   const includeLine = isCombo && p.items?.length ? `Incluye: ${p.items.join(", ")}` : "";
-  const imgUrl = p.image.startsWith("http") ? p.image : new URL(p.image, window.location.origin).href;
+  const imgUrl = p.__imgUrl || toPublicUrl(p.image);
   const msg = [
     imgUrl,
     `Hola, quiero este ${isCombo ? "combo" : "juego"}:`,
-    `${p.title}`,
+    p.title,
     `Consola: ${p.platform}`,
     ...(includeLine ? [includeLine] : []),
     `Precio: ${fmtCOP.format(p.price)}`
