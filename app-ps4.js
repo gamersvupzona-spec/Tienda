@@ -1,7 +1,8 @@
-// app-ps4.js — mostrar solo tarjetas con imagen OK y 10 + 10
-const WHATSAPP_NUMBER = "573053727045";               // tu número
-const PUBLIC_ORIGIN   = "https://gamersvupzona-spec.github.io/Tienda"; // tu dominio de GitHub Pages
+// app-ps4.js v42 — elimina tarjetas sin imagen y usa URL pública en WhatsApp
+const WHATSAPP_NUMBER = "573053727045"; // tu número
+const PUBLIC_ORIGIN   = "https://gamersvupzona-spec.github.io/Tienda";
 const PLATFORM        = "PS4";
+const VERSION         = "ps4-v42";
 
 const isMobile = /Android|iPhone|iPad|iPod|Windows Phone|Mobi/i.test(navigator.userAgent);
 const waUrlSmart = (text) => {
@@ -11,12 +12,16 @@ const waUrlSmart = (text) => {
     : `https://web.whatsapp.com/send?phone=${WHATSAPP_NUMBER}&text=${t}`;
 };
 
-// Convierte rutas locales (img/...) a URL pública HTTPS
+// 1) Rutas y filtros de imagen
 const toPublicUrl = (src) => src?.startsWith("http") ? src : new URL(src, PUBLIC_ORIGIN + "/").href;
+// Si quieres ocultar “placeholders” remotos, márcalos aquí
+const BLOCKED_HOSTS = [/placeholder\.com/i, /via\.placeholder\.com/i];
+const isBlockedUrl = (url) => BLOCKED_HOSTS.some(r => r.test(url ?? ""));
 
-// Verifica si una imagen carga correctamente (timeout 6s)
+// Verifica si una imagen carga (timeout 6s)
 function imgOk(url) {
   return new Promise((resolve) => {
+    if (!url || isBlockedUrl(url)) return resolve(false);
     const img = new Image();
     let done = false;
     const end = (ok) => { if (!done) { done = true; resolve(!!ok); } };
@@ -27,10 +32,10 @@ function imgOk(url) {
   });
 }
 
-// Filtra una lista dejando solo las que tienen imagen válida
+// Filtra una lista dejando solo productos con imagen válida
 async function keepOnlyWithImage(list) {
   const tested = await Promise.all(list.map(async (p) => {
-    if (!p.image) return null;
+    if (!p.image || !String(p.image).trim()) return null;
     const url = toPublicUrl(p.image);
     const ok  = await imgOk(url);
     return ok ? { ...p, __imgUrl: url } : null;
@@ -38,10 +43,10 @@ async function keepOnlyWithImage(list) {
   return tested.filter(Boolean);
 }
 
-// Catálogo
+// 2) Catálogo
 const DB = window.PRODUCTS || [];
 
-// DOM
+// 3) DOM
 const $gridInd    = document.getElementById("grid-individual");
 const $gridCombo  = document.getElementById("grid-combos");
 const $emptyInd   = document.getElementById("empty-individual");
@@ -50,37 +55,30 @@ const $search     = document.getElementById("search");
 const $ctaWa      = document.getElementById("cta-wa");
 const $waFab      = document.getElementById("wa-fab");
 
-// Utils
+// 4) Utils
 const fmtCOP = new Intl.NumberFormat("es-CO",{style:"currency",currency:"COP",maximumFractionDigits:0});
-
-// Enlaces WhatsApp globales
 const baseHola = "Hola, quiero más información.";
-if ($ctaWa) $ctaWa.href = waUrlSmart(baseHola);
-if ($waFab) $waFab.href = waUrlSmart(baseHola);
-
-// Año
+$ctaWa && ($ctaWa.href = waUrlSmart(baseHola));
+$waFab && ($waFab.href = waUrlSmart(baseHola));
 document.getElementById("year")?.replaceChildren(new Date().getFullYear());
 
-// Log de verificación
-console.log("PS4 | total:", DB.length,
-  "| indiv:", DB.filter(p=>p.platform===PLATFORM && p.packType==="individual").length,
-  "| combos:", DB.filter(p=>p.platform===PLATFORM && p.packType==="combo").length
-);
+console.log(`PS4 loader ${VERSION}`, {
+  total: DB.length,
+  indiv: DB.filter(p=>p.platform===PLATFORM && p.packType==="individual").length,
+  combos: DB.filter(p=>p.platform===PLATFORM && p.packType==="combo").length
+});
 
-// Estado + render
+// 5) Estado + render
 let q = "";
 render();
 $search?.addEventListener("input", e => { q = e.target.value.trim().toLowerCase(); render(); });
 
-// Render asíncrono: primero filtramos por datos, luego validamos imagen
+// Render asíncrono: primero datos, luego valida imagen, luego pinta
 async function render(){
   const baseInd  = DB.filter(p => p.platform===PLATFORM && p.packType==="individual" && p.title.toLowerCase().includes(q)).slice(0, 10);
   const baseComb = DB.filter(p => p.platform===PLATFORM && p.packType==="combo"      && p.title.toLowerCase().includes(q)).slice(0, 10);
 
-  const [ind, comb] = await Promise.all([
-    keepOnlyWithImage(baseInd),
-    keepOnlyWithImage(baseComb)
-  ]);
+  const [ind, comb] = await Promise.all([ keepOnlyWithImage(baseInd), keepOnlyWithImage(baseComb) ]);
 
   paint(ind,  $gridInd,  $emptyInd);
   paint(comb, $gridCombo, $emptyCombo);
@@ -100,15 +98,14 @@ function paint(list, $grid, $empty){
 
   // Botón WhatsApp
   list.forEach(p => {
-    $grid.querySelector(`button[data-id="${p.id}"]`)
-      ?.addEventListener("click", () => wa(p));
+    $grid.querySelector(`button[data-id="${p.id}"]`)?.addEventListener("click", () => wa(p));
   });
 }
 
 function cardHTML(p){
   const isCombo = p.packType === "combo";
   const itemsLine = isCombo && p.items?.length ? `Incluye: ${p.items.join(", ")}` : "";
-  const src = p.__imgUrl || toPublicUrl(p.image);
+  const src = p.__imgUrl; // ya validada
   return `
     <article class="card" id="${p.id}">
       <img src="${src}" alt="${p.title}" loading="lazy" />
@@ -130,8 +127,8 @@ function cardHTML(p){
 function wa(p){
   const isCombo = p.packType==="combo";
   const includeLine = isCombo && p.items?.length ? `Incluye: ${p.items.join(", ")}` : "";
+  const imgUrl = p.__imgUrl; // pública y válida
 
-  const imgUrl = p.__imgUrl || toPublicUrl(p.image); // pública para miniatura
   const msg = [
     imgUrl,
     `Hola, quiero este ${isCombo ? "combo" : "juego"}:`,
