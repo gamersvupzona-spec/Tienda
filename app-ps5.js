@@ -1,7 +1,8 @@
-// app-ps5.js — mismo comportamiento para PS5
+// app-ps5.js v42 — elimina tarjetas sin imagen y usa URL pública en WhatsApp
 const WHATSAPP_NUMBER = "573053727045";
 const PUBLIC_ORIGIN   = "https://gamersvupzona-spec.github.io/Tienda";
 const PLATFORM        = "PS5";
+const VERSION         = "ps5-v42";
 
 const isMobile = /Android|iPhone|iPad|iPod|Windows Phone|Mobi/i.test(navigator.userAgent);
 const waUrlSmart = (text) => {
@@ -12,9 +13,12 @@ const waUrlSmart = (text) => {
 };
 
 const toPublicUrl = (src) => src?.startsWith("http") ? src : new URL(src, PUBLIC_ORIGIN + "/").href;
+const BLOCKED_HOSTS = [/placeholder\.com/i, /via\.placeholder\.com/i];
+const isBlockedUrl = (url) => BLOCKED_HOSTS.some(r => r.test(url ?? ""));
 
 function imgOk(url) {
   return new Promise((resolve) => {
+    if (!url || isBlockedUrl(url)) return resolve(false);
     const img = new Image();
     let done = false;
     const end = (ok) => { if (!done) { done = true; resolve(!!ok); } };
@@ -27,7 +31,7 @@ function imgOk(url) {
 
 async function keepOnlyWithImage(list) {
   const tested = await Promise.all(list.map(async (p) => {
-    if (!p.image) return null;
+    if (!p.image || !String(p.image).trim()) return null;
     const url = toPublicUrl(p.image);
     const ok  = await imgOk(url);
     return ok ? { ...p, __imgUrl: url } : null;
@@ -48,14 +52,15 @@ const $waFab      = document.getElementById("wa-fab");
 const fmtCOP = new Intl.NumberFormat("es-CO",{style:"currency",currency:"COP",maximumFractionDigits:0});
 
 const baseHola = "Hola, quiero más información.";
-if ($ctaWa) $ctaWa.href = waUrlSmart(baseHola);
-if ($waFab) $waFab.href = waUrlSmart(baseHola);
+$ctaWa && ($ctaWa.href = waUrlSmart(baseHola));
+$waFab && ($waFab.href = waUrlSmart(baseHola));
 document.getElementById("year")?.replaceChildren(new Date().getFullYear());
 
-console.log("PS5 | total:", DB.length,
-  "| indiv:", DB.filter(p=>p.platform===PLATFORM && p.packType==="individual").length,
-  "| combos:", DB.filter(p=>p.platform===PLATFORM && p.packType==="combo").length
-);
+console.log(`PS5 loader ${VERSION}`, {
+  total: DB.length,
+  indiv: DB.filter(p=>p.platform===PLATFORM && p.packType==="individual").length,
+  combos: DB.filter(p=>p.platform===PLATFORM && p.packType==="combo").length
+});
 
 let q = "";
 render();
@@ -65,10 +70,7 @@ async function render(){
   const baseInd  = DB.filter(p => p.platform===PLATFORM && p.packType==="individual" && p.title.toLowerCase().includes(q)).slice(0, 10);
   const baseComb = DB.filter(p => p.platform===PLATFORM && p.packType==="combo"      && p.title.toLowerCase().includes(q)).slice(0, 10);
 
-  const [ind, comb] = await Promise.all([
-    keepOnlyWithImage(baseInd),
-    keepOnlyWithImage(baseComb)
-  ]);
+  const [ind, comb] = await Promise.all([ keepOnlyWithImage(baseInd), keepOnlyWithImage(baseComb) ]);
 
   paint(ind,  $gridInd,  $emptyInd);
   paint(comb, $gridCombo, $emptyCombo);
@@ -87,15 +89,14 @@ function paint(list, $grid, $empty){
   $grid.innerHTML = list.map(cardHTML).join("");
 
   list.forEach(p => {
-    $grid.querySelector(`button[data-id="${p.id}"]`)
-      ?.addEventListener("click", () => wa(p));
+    $grid.querySelector(`button[data-id="${p.id}"]`)?.addEventListener("click", () => wa(p));
   });
 }
 
 function cardHTML(p){
   const isCombo = p.packType === "combo";
   const itemsLine = isCombo && p.items?.length ? `Incluye: ${p.items.join(", ")}` : "";
-  const src = p.__imgUrl || toPublicUrl(p.image);
+  const src = p.__imgUrl;
   return `
     <article class="card" id="${p.id}">
       <img src="${src}" alt="${p.title}" loading="lazy" />
@@ -117,7 +118,7 @@ function cardHTML(p){
 function wa(p){
   const isCombo = p.packType==="combo";
   const includeLine = isCombo && p.items?.length ? `Incluye: ${p.items.join(", ")}` : "";
-  const imgUrl = p.__imgUrl || toPublicUrl(p.image);
+  const imgUrl = p.__imgUrl;
   const msg = [
     imgUrl,
     `Hola, quiero este ${isCombo ? "combo" : "juego"}:`,
