@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Zona Gamer</title>
+  <link rel="icon" href="img/logo.png" type="image/png" />
+  <!-- Fuente -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="top">
+    <div class="wrap brand">
+      <div class="logo-ring-outer">
+        <div class="logo-ring-inner">
+          <img src="img/logo.png" alt="Zona Gamer" class="logo" />
+        </div>
+      </div>
+      <h1 class="brand-name">Zona Gamer</h1>
+      <nav>
+        <a href="ps4.html">PS4</a>
+        <a href="ps5.html">PS5</a>
+        <a href="#como-funciona">Cómo funciona</a>
+        <a href="#contacto">Contacto</a>
+        <a class="ig-link" href="https://www.instagram.com/zonagamersvup?igsh=MXd2ZHNxbnZsYjU5aA==" target="_blank" rel="noopener">
+          <span class="ig-dot"></span> Instagram
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="wrap hero">
+    <h2>Elige tu consola</h2>
+    <div class="tiles">
+      <a class="tile tile-ps4" href="ps4.html">🎮 Catálogo PS4</a>
+      <a class="tile tile-ps5" href="ps5.html">⚡ Catálogo PS5</a>
+    </div>
+  </section>
+
+  <section id="como-funciona" class="wrap">
+    <h2>Cómo funciona</h2>
+    <ol class="steps">
+      <li>Entra a PS4 o PS5 y elige tu juego o combo.</li>
+      <li>Toca “Pedir por WhatsApp”.</li>
+      <li>Te confirmo precio, disponibilidad y tiempo de instalación.</li>
+      <li>Me envías el código que pide PlayStation para activar/instalar.</li>
+      <li>Hago la instalación y te aviso cuando quede listo.</li>
+    </ol>
+    <p class="note">Entrega 100% digital (sin envío físico).</p>
+  </section>
+
+  <section id="contacto" class="wrap">
+    <h2>Contacto</h2>
+    <p>Atención por WhatsApp. Horario: 9:00–20:00 (COL).</p>
+    <a id="cta-wa" class="btn wa" target="_blank" rel="noopener">Escríbeme por WhatsApp</a>
+  </section>
+
+  <a id="wa-fab" class="wa-fab" target="_blank" rel="noopener" title="Chatea por WhatsApp">💬</a>
+
+  <footer class="footer">
+    <div class="wrap footer-grid">
+      <small>© <span id="year"></span> Zona Gamer — Colombia</small>
+      <div class="socials">
+        <a class="ig-link" href="https://www.instagram.com/zonagamersvup?igsh=MXd2ZHNxbnZsYjU5aA==" target="_blank" rel="noopener">
+          <span class="ig-dot"></span> @zonagamersvup
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // WhatsApp: abre app en móvil y Web en PC
+    const WHATSAPP_NUMBER = "573053727045"; // <-- tu número
+    const isMobile = /Android|iPhone|iPad|iPod|Windows Phone|Mobi/i.test(navigator.userAgent);
+    const waUrlSmart = (text) => {
+      const t = encodeURIComponent(text);
+      return isMobile
+        ? `https://api.whatsapp.com/send?phone=${WHATSAPP_NUMBER}&text=${t}`
+        : `https://web.whatsapp.com/send?phone=${WHATSAPP_NUMBER}&text=${t}`;
+    };
+
+    const baseHola = "Hola, quiero más información.";
+    const url = waUrlSmart(baseHola);
+    const cta = document.getElementById("cta-wa");
+    const fab = document.getElementById("wa-fab");
+    if (cta) cta.href = url;
+    if (fab) fab.href = url;
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Zona Gamer — PS4</title>
+  <link rel="icon" href="img/logo.png" type="image/png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="top">
+    <div class="wrap brand">
+      <div class="logo-ring-outer">
+        <div class="logo-ring-inner">
+          <img src="img/logo.png" alt="Zona Gamer" class="logo" />
+        </div>
+      </div>
+      <h1 class="brand-name">Zona Gamer</h1>
+      <nav>
+        <a href="ps4.html" aria-current="page">PS4</a>
+        <a href="ps5.html">PS5</a>
+        <a href="index.html#como-funciona">Cómo funciona</a>
+        <a href="index.html#contacto">Contacto</a>
+        <a class="ig-link" href="https://www.instagram.com/zonagamersvup?igsh=MXd2ZHNxbnZsYjU5aA==" target="_blank" rel="noopener">
+          <span class="ig-dot"></span> Instagram
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <section id="catalogo" class="wrap">
+    <div class="page-head">
+      <h2>Catálogo PS4</h2>
+      <input id="search" class="input" type="search" placeholder="Buscar (ej: FIFA, God of War)..." />
+    </div>
+
+    <div class="block">
+      <h3>Individual</h3>
+      <div id="grid-individual" class="grid"></div>
+      <div id="empty-individual" class="empty card-muted" hidden>No hay resultados en Individual.</div>
+    </div>
+
+    <div class="block">
+      <h3>Combos</h3>
+      <div id="grid-combos" class="grid"></div>
+      <div id="empty-combos" class="empty card-muted" hidden>No hay resultados en Combos.</div>
+    </div>
+  </section>
+
+  <section class="wrap align-end">
+    <a id="cta-wa" class="btn wa" target="_blank" rel="noopener">Escríbeme por WhatsApp</a>
+  </section>
+
+  <a id="wa-fab" class="wa-fab" target="_blank" rel="noopener" title="Chatea por WhatsApp">💬</a>
+
+  <footer class="footer">
+    <div class="wrap footer-grid">
+      <small>© <span id="year"></span> Zona Gamer — Colombia</small>
+      <div class="socials">
+        <a class="ig-link" href="https://www.instagram.com/zonagamersvup?igsh=MXd2ZHNxbnZsYjU5aA==" target="_blank" rel="noopener">
+          <span class="ig-dot"></span> @zonagamersvup
+        </a>
+      </div>
+    </div>
+  </footer>
+
+ <script src="products.js?v=15"></script>
+<script src="app-ps4.js?v=15"></script>
+</body>
+</html>
