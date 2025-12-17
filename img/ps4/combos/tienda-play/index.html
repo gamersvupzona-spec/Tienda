@@ -1,0 +1,914 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Zona Gamer</title>
+  <link rel="icon" href="img/logo.png" type="image/png" />
+
+  <!-- Fuente -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- ESTILOS GAMER -->
+  <style>
+    /* =========================
+       Reset & base
+       ========================= */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top, #111827 0, #020617 45%, #000 100%);
+      color: #e5e7eb;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* =========================
+       Layout
+       ========================= */
+
+    .wrap {
+      width: min(1120px, 100% - 2rem);
+      margin: 0 auto;
+      padding: 1rem 0;
+    }
+
+    /* =========================
+       Header / Brand
+       ========================= */
+
+    .top {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(2, 6, 23, 0.92);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(148, 163, 184, 0.4);
+      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.85);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+
+    .logo-ring-outer {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      padding: 4px;
+      background: conic-gradient(
+        #22d3ee,
+        #ec4899,
+        #a855f7,
+        #22d3ee
+      );
+      box-shadow: 0 0 24px rgba(56, 189, 248, 0.75);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-ring-inner {
+      width: 100%;
+      height: 100%;
+      border-radius: inherit;
+      background: #020617;
+      padding: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .brand-name {
+      font-size: clamp(1.5rem, 3vw + 0.4rem, 2.1rem);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: #f9fafb;
+      text-shadow:
+        0 0 10px rgba(56, 189, 248, 1),
+        0 0 30px rgba(56, 189, 248, 0.8);
+    }
+
+    /* =========================
+       Nav
+       ========================= */
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      font-size: 0.78rem;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      position: relative;
+      padding: 0.4rem 0.9rem;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-weight: 600;
+      color: #cbd5f5;
+      transition:
+        0.2s color,
+        0.2s background,
+        0.2s box-shadow,
+        0.2s transform,
+        0.2s border-color;
+      border: 1px solid transparent;
+    }
+
+    nav a::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      border: 1px solid rgba(148, 163, 184, 0.45);
+      opacity: 0;
+      transition: 0.2s opacity;
+    }
+
+    nav a:hover {
+      color: #f9fafb;
+      background: radial-gradient(
+        circle at top left,
+        rgba(56, 189, 248, 0.3),
+        rgba(15, 23, 42, 0.95)
+      );
+      box-shadow: 0 0 18px rgba(56, 189, 248, 0.7);
+      transform: translateY(-1px);
+      border-color: rgba(56, 189, 248, 0.7);
+    }
+
+    nav a:hover::before {
+      opacity: 1;
+    }
+
+    .ig-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      color: #f9a8d4;
+    }
+
+    .ig-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: radial-gradient(
+        circle at 30% 30%,
+        #facc15,
+        #f97316,
+        #ec4899,
+        #6366f1
+      );
+      box-shadow: 0 0 10px rgba(236, 72, 153, 0.9);
+    }
+
+    /* =========================
+       Hero / Consolas
+       ========================= */
+
+    .hero {
+      padding: 3.5rem 0 3rem;
+      text-align: center;
+    }
+
+    .hero h2 {
+      font-size: clamp(1.7rem, 3vw + 0.4rem, 2.3rem);
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: #e5e7eb;
+    }
+
+    .tiles {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 1.6rem;
+      margin-top: 0.5rem;
+    }
+
+    .tile {
+      position: relative;
+      padding: 1.4rem 1.6rem;
+      border-radius: 1rem;
+      font-size: 1.02rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      color: #f9fafb;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      box-shadow: 0 24px 45px rgba(15, 23, 42, 0.9);
+      overflow: hidden;
+      transition:
+        0.25s transform,
+        0.25s box-shadow,
+        0.25s border-color;
+    }
+
+    .tile::after {
+      content: "";
+      position: absolute;
+      inset: -20%;
+      background: radial-gradient(
+        circle at 0 0,
+        rgba(56, 189, 248, 0.5),
+        transparent 60%
+      );
+      opacity: 0;
+      transform: translate3d(-40%, -40%, 0);
+      transition:
+        0.3s opacity,
+        0.3s transform;
+      pointer-events: none;
+    }
+
+    .tile:hover {
+      transform: translateY(-4px) scale(1.02);
+      border-color: rgba(56, 189, 248, 0.9);
+      box-shadow: 0 32px 65px rgba(15, 23, 42, 1);
+    }
+
+    .tile:hover::after {
+      opacity: 1;
+      transform: translate3d(-10%, -10%, 0);
+    }
+
+    .tile-ps4 {
+      background: radial-gradient(
+        circle at 0 0,
+        rgba(56, 189, 248, 0.45),
+        #020617
+      );
+    }
+
+    .tile-ps5 {
+      background: radial-gradient(
+        circle at 0 0,
+        rgba(248, 113, 113, 0.45),
+        #020617
+      );
+    }
+
+    /* =========================
+       Secciones: Cómo funciona / Contacto
+       ========================= */
+
+    #como-funciona,
+    #contacto {
+      margin-top: 0.5rem;
+      padding-bottom: 0.5rem;
+    }
+
+    #como-funciona h2,
+    #contacto h2 {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: #e5e7eb;
+    }
+
+    .steps {
+      list-style: none;
+      display: grid;
+      gap: 0.6rem;
+      counter-reset: paso;
+    }
+
+    .steps li {
+      position: relative;
+      counter-increment: paso;
+      padding: 0.8rem 1rem 0.8rem 2.8rem;
+      border-radius: 0.9rem;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(75, 85, 99, 0.85);
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.95);
+      color: #d1d5db;
+      line-height: 1.5;
+    }
+
+    .steps li::before {
+      content: counter(paso);
+      position: absolute;
+      left: 0.9rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 1.6rem;
+      height: 1.6rem;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+      background: radial-gradient(circle at 30% 0, #22c55e, #22d3ee);
+      color: #0b1120;
+      box-shadow: 0 0 15px rgba(34, 197, 94, 0.85);
+    }
+
+    .note {
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      color: #9ca3af;
+      font-style: italic;
+    }
+
+    .note.small {
+      font-size: 0.7rem;
+      margin-top: 0.4rem;
+    }
+
+    #contacto p {
+      margin-bottom: 1rem;
+      color: #d1d5db;
+    }
+
+    /* =========================
+       Botones
+       ========================= */
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      padding: 0.7rem 1.4rem;
+      border-radius: 999px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-size: 0.78rem;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition:
+        0.25s background,
+        0.25s border-color,
+        0.25s color,
+        0.25s box-shadow,
+        0.25s transform;
+    }
+
+    .btn.wa {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: #f9fafb;
+      box-shadow: 0 0 20px rgba(34, 197, 94, 0.9);
+    }
+
+    .btn.wa:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 26px rgba(34, 197, 94, 1);
+      border-color: rgba(187, 247, 208, 0.85);
+    }
+
+    .btn.send {
+      background: linear-gradient(135deg, #38bdf8, #6366f1);
+      color: #f9fafb;
+      box-shadow: 0 0 18px rgba(56, 189, 248, 0.9);
+    }
+
+    .btn.send:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 24px rgba(79, 70, 229, 1);
+      border-color: rgba(191, 219, 254, 0.9);
+    }
+
+    /* =========================
+       WhatsApp flotante
+       ========================= */
+
+    .wa-fab {
+      position: fixed;
+      right: 1.4rem;
+      bottom: 1.4rem;
+      width: 3.2rem;
+      height: 3.2rem;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #f9fafb;
+      font-size: 1.4rem;
+      box-shadow: 0 0 22px rgba(34, 197, 94, 1);
+      z-index: 60;
+      transition:
+        0.25s transform,
+        0.25s box-shadow;
+    }
+
+    .wa-fab:hover {
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 0 30px rgba(34, 197, 94, 1);
+    }
+
+    /* =========================
+       Sección opiniones
+       ========================= */
+
+    #opiniones {
+      margin-top: 1.5rem;
+      padding-bottom: 1rem;
+    }
+
+    #opiniones h2 {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: #e5e7eb;
+    }
+
+    .opiniones-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.2fr);
+      gap: 1.2rem;
+      align-items: flex-start;
+    }
+
+    .card {
+      background: rgba(15, 23, 42, 0.95);
+      border-radius: 1rem;
+      border: 1px solid rgba(75, 85, 99, 0.9);
+      box-shadow: 0 20px 45px rgba(15, 23, 42, 1);
+      padding: 1.1rem 1.2rem;
+    }
+
+    .opinion-form h3,
+    .opinion-list h3 {
+      font-size: 0.95rem;
+      margin-bottom: 0.6rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #e5e7eb;
+    }
+
+    .opinion-form .field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      margin-bottom: 0.8rem;
+      font-size: 0.86rem;
+    }
+
+    .opinion-form label {
+      color: #9ca3af;
+    }
+
+    .opinion-form input,
+    .opinion-form textarea {
+      background: rgba(15, 23, 42, 0.8);
+      border-radius: 0.6rem;
+      border: 1px solid #4b5563;
+      padding: 0.55rem 0.7rem;
+      font-size: 0.86rem;
+      color: #e5e7eb;
+      resize: vertical;
+    }
+
+    .opinion-form input::placeholder,
+    .opinion-form textarea::placeholder {
+      color: #6b7280;
+    }
+
+    .opinion-form input:focus,
+    .opinion-form textarea:focus {
+      outline: none;
+      border-color: #38bdf8;
+      box-shadow: 0 0 0 1px #38bdf8;
+    }
+
+    .rating-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-bottom: 0.8rem;
+      font-size: 0.86rem;
+      color: #9ca3af;
+      flex-wrap: wrap;
+    }
+
+    .rating-stars {
+      display: flex;
+      gap: 0.15rem;
+      font-size: 1.4rem;
+      cursor: pointer;
+    }
+
+    .rating-star {
+      color: #4b5563;
+      transition: color 0.15s, transform 0.15s, text-shadow 0.15s;
+      user-select: none;
+    }
+
+    .rating-star.active {
+      color: #facc15;
+      text-shadow: 0 0 12px rgba(250, 204, 21, 0.9);
+      transform: translateY(-1px);
+    }
+
+    .rating-hint {
+      font-size: 0.75rem;
+      color: #9ca3af;
+      white-space: nowrap;
+    }
+
+    .opiniones-contenido {
+      margin-top: 0.4rem;
+      font-size: 0.86rem;
+    }
+
+    .opinion-item {
+      padding: 0.7rem 0;
+      border-bottom: 1px solid rgba(31, 41, 55, 0.9);
+    }
+
+    .opinion-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .opinion-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.4rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .opinion-name {
+      font-size: 0.9rem;
+      color: #e5e7eb;
+    }
+
+    .opinion-stars {
+      font-size: 0.82rem;
+      color: #facc15;
+      text-shadow: 0 0 8px rgba(250, 204, 21, 0.9);
+    }
+
+    .opinion-date {
+      font-size: 0.7rem;
+      color: #9ca3af;
+    }
+
+    .opinion-text {
+      font-size: 0.85rem;
+      color: #d1d5db;
+    }
+
+    .empty-opiniones {
+      font-size: 0.82rem;
+      color: #9ca3af;
+      font-style: italic;
+    }
+
+    /* =========================
+       Footer
+       ========================= */
+
+    .footer {
+      margin-top: 3rem;
+      background: rgba(2, 6, 23, 0.97);
+      border-top: 1px solid rgba(30, 64, 175, 0.8);
+    }
+
+    .footer-grid {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1rem 0;
+      font-size: 0.78rem;
+      color: #6b7280;
+    }
+
+    /* =========================
+       Responsive
+       ========================= */
+
+    @media (max-width: 768px) {
+      .brand {
+        flex-wrap: wrap;
+      }
+
+      .logo-ring-outer {
+        width: 76px;
+        height: 76px;
+      }
+
+      .brand-name {
+        flex: 1;
+        text-align: left;
+        font-size: 1.4rem;
+      }
+
+      nav {
+        width: 100%;
+        justify-content: flex-start;
+      }
+
+      .hero {
+        padding-top: 2.5rem;
+      }
+
+      body {
+        padding-bottom: 4rem; /* espacio para el botón flotante */
+      }
+
+      .opiniones-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .rating-hint {
+        white-space: normal;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="top">
+    <div class="wrap brand">
+      <div class="logo-ring-outer">
+        <div class="logo-ring-inner">
+          <img src="img/logo.png" alt="Zona Gamer" class="logo" />
+        </div>
+      </div>
+      <h1 class="brand-name">Zona Gamer</h1>
+      <nav>
+        <a href="ps4.html">PS4</a>
+        <a href="ps5.html">PS5</a>
+        <a href="#como-funciona">Cómo funciona</a>
+       
+        <a href="#opiniones">Opiniones</a>
+        <a class="ig-link" href="https://www.instagram.com/zonagamersvup?igsh=MXd2ZHNxbnZsYjU5aA==" target="_blank" rel="noopener">
+          <span class="ig-dot"></span> Instagram
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="wrap hero">
+    <h2>Elige tu consola</h2>
+    <div class="tiles">
+      <a class="tile tile-ps4" href="ps4.html">🎮 Catálogo PS4</a>
+      <a class="tile tile-ps5" href="ps5.html">⚡ Catálogo PS5</a>
+    </div>
+  </section>
+
+  <section id="como-funciona" class="wrap">
+    <h2>Cómo funciona</h2>
+    <ol class="steps">
+      <li>Entra a PS4 o PS5 y elige tu juego o combo.</li>
+      <li>Toca “Pedir por WhatsApp”.</li>
+      <li>Te confirmo precio, disponibilidad y tiempo de instalación.</li>
+      <li>Me envías el código que pide PlayStation para activar/instalar.</li>
+      <li>Hago la instalación y te aviso cuando quede listo.</li>
+    </ol>
+    <p class="note">Entrega 100% digital (sin envío físico).</p>
+  </section>
+
+  <section id="contacto" class="wrap">
+ 
+    <p>Atención por WhatsApp. Horario: 9:00–22:00 (COL).</p>
+   
+  </section>
+
+  <!-- NUEVA SECCIÓN: OPINIONES + ESTRELLAS -->
+  <section id="opiniones" class="wrap">
+    <h2>Opiniones de gamers</h2>
+    <div class="opiniones-grid">
+      <form id="opinion-form" class="card opinion-form">
+        <h3>Deja tu opinión</h3>
+
+        <div class="field">
+          <label for="nombre">Nombre o gamer tag</label>
+          <input id="nombre" maxlength="40" placeholder="Ej: Juan, G4mer_21..." />
+        </div>
+
+        <div class="rating-row">
+          <div>
+            <span>Tu calificación</span>
+            <div class="rating-stars">
+              <span class="rating-star" data-value="1">★</span>
+              <span class="rating-star" data-value="2">★</span>
+              <span class="rating-star" data-value="3">★</span>
+              <span class="rating-star" data-value="4">★</span>
+              <span class="rating-star" data-value="5">★</span>
+            </div>
+          </div>
+          <span class="rating-hint" id="rating-hint">Elige de 1 a 5 estrellas</span>
+        </div>
+
+        <input type="hidden" id="rating" value="0" />
+
+        <div class="field">
+          <label for="mensaje">Comentario</label>
+          <textarea id="mensaje" rows="3" maxlength="280"
+            placeholder="¿Cómo te fue con la instalación, atención, etc.?"></textarea>
+        </div>
+
+        <button type="submit" class="btn send">Publicar opinión</button>
+        <p class="note small">Las opiniones se guardan en este navegador.</p>
+      </form>
+
+      <div class="card opinion-list">
+        <h3>Lo que dicen otros gamers</h3>
+        <div id="opiniones-contenido" class="opiniones-contenido">
+          <p class="empty-opiniones">Aún no hay opiniones. ¡Sé el primero en comentar!</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <a id="wa-fab" class="wa-fab" target="_blank" rel="noopener" title="Chatea por WhatsApp">💬</a>
+
+  <footer class="footer">
+    <div class="wrap footer-grid">
+      <small>© <span id="year"></span> Zona Gamer — Colombia</small>
+      <div class="socials">
+        <a class="ig-link" href="https://www.instagram.com/zonagamersvup?igsh=MXd2ZHNxbnZsYjU5aA==" target="_blank" rel="noopener">
+          <span class="ig-dot"></span> @zonagamersvup
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // WhatsApp: abre app en móvil y Web en PC
+    const WHATSAPP_NUMBER = "573053727045"; // <-- tu número
+    const isMobile = /Android|iPhone|iPad|iPod|Windows Phone|Mobi/i.test(navigator.userAgent);
+    const waUrlSmart = (text) => {
+      const t = encodeURIComponent(text);
+      return isMobile
+        ? `https://api.whatsapp.com/send?phone=${WHATSAPP_NUMBER}&text=${t}`
+        : `https://web.whatsapp.com/send?phone=${WHATSAPP_NUMBER}&text=${t}`;
+    };
+
+    const baseHola = "Hola, quiero más información.";
+    const url = waUrlSmart(baseHola);
+    const cta = document.getElementById("cta-wa");
+    const fab = document.getElementById("wa-fab");
+    if (cta) cta.href = url;
+    if (fab) fab.href = url;
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // ============================
+    // Opiniones + estrellas (localStorage)
+    // ============================
+    const STORAGE_KEY = "zonaGamerOpiniones";
+
+    const loadOpiniones = () => {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        return raw ? JSON.parse(raw) : [];
+      } catch (e) {
+        return [];
+      }
+    };
+
+    let opiniones = loadOpiniones();
+
+    const form = document.getElementById("opinion-form");
+    const listContainer = document.getElementById("opiniones-contenido");
+    const ratingHidden = document.getElementById("rating");
+    const ratingStars = document.querySelectorAll(".rating-star");
+    const ratingHint = document.getElementById("rating-hint");
+
+    if (form && listContainer && ratingHidden && ratingStars.length) {
+      const hints = {
+        1: "1★ — Malo",
+        2: "2★ — Regular",
+        3: "3★ — Bien",
+        4: "4★ — Muy bueno",
+        5: "5★ — Excelente"
+      };
+
+      const escapeHTML = (str) =>
+        str.replace(/[&<>"']/g, (c) =>
+          ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[c])
+        );
+
+      const renderStarsText = (n) => "★★★★★".slice(0, n).padEnd(5, "☆");
+
+      function updateStars(num) {
+        ratingStars.forEach((star) => {
+          const value = Number(star.dataset.value);
+          star.classList.toggle("active", value <= num);
+        });
+        if (ratingHint) {
+          ratingHint.textContent = num ? hints[num] : "Elige de 1 a 5 estrellas";
+        }
+      }
+
+      function renderOpiniones() {
+        listContainer.innerHTML = "";
+        if (!opiniones.length) {
+          const p = document.createElement("p");
+          p.className = "empty-opiniones";
+          p.textContent = "Aún no hay opiniones. ¡Sé el primero en comentar!";
+          listContainer.appendChild(p);
+          return;
+        }
+        opiniones.slice().reverse().forEach((op) => {
+          const item = document.createElement("div");
+          item.className = "opinion-item";
+          item.innerHTML = `
+            <div class="opinion-header">
+              <strong class="opinion-name">${escapeHTML(op.nombre)}</strong>
+              <span class="opinion-stars">${renderStarsText(op.rating)}</span>
+              <span class="opinion-date">${escapeHTML(op.fecha)}</span>
+            </div>
+            <p class="opinion-text">${escapeHTML(op.mensaje)}</p>
+          `;
+          listContainer.appendChild(item);
+        });
+      }
+
+      ratingStars.forEach((star) => {
+        star.addEventListener("click", () => {
+          const value = Number(star.dataset.value);
+          ratingHidden.value = String(value);
+          updateStars(value);
+        });
+      });
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const nombre = (document.getElementById("nombre").value.trim() || "Gamer anónimo");
+        const mensaje = document.getElementById("mensaje").value.trim();
+        const rating = Number(ratingHidden.value);
+
+        if (!mensaje || !rating) {
+          alert("Pon al menos un comentario y una calificación de estrellas.");
+          return;
+        }
+
+        const now = new Date();
+        const fecha = now.toLocaleDateString("es-CO", {
+          year: "numeric",
+          month: "short",
+          day: "numeric"
+        });
+
+        const nueva = { nombre, mensaje, rating, fecha };
+        opiniones.push(nueva);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(opiniones));
+
+        document.getElementById("mensaje").value = "";
+        ratingHidden.value = "0";
+        updateStars(0);
+        renderOpiniones();
+      });
+
+      updateStars(Number(ratingHidden.value) || 0);
+      renderOpiniones();
+    }
+  </script>
+</body>
+</html>

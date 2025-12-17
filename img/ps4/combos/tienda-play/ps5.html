@@ -1,0 +1,462 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Zona Gamer – Catálogo PS5</title>
+  <link rel="icon" href="img/logo.png" type="image/png" />
+
+  <!-- Fuente -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ============ RESET & BASE ============ */
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{
+      font-family:"Inter",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:radial-gradient(circle at top,#020617 0,#020617 45%,#000 100%);
+      color:#e5e7eb;
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+    }
+    img{max-width:100%;display:block;}
+    a{text-decoration:none;color:inherit;}
+
+    .wrap{
+      width:min(1120px,100% - 2rem);
+      margin:0 auto;
+      padding:1rem 0;
+    }
+
+    /* ============ HEADER / BRAND ============ */
+    .top{
+      position:sticky;top:0;z-index:50;
+      background:rgba(2,6,23,.92);
+      backdrop-filter:blur(18px);
+      border-bottom:1px solid rgba(148,163,184,.4);
+      box-shadow:0 18px 45px rgba(15,23,42,.85);
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:1.5rem;
+    }
+    .logo-ring-outer{
+      width:96px;height:96px;border-radius:50%;
+      padding:4px;
+      background:conic-gradient(#22d3ee,#6366f1,#a855f7,#22d3ee);
+      box-shadow:0 0 24px rgba(59,130,246,.8);
+      display:flex;align-items:center;justify-content:center;
+    }
+    .logo-ring-inner{
+      width:100%;height:100%;border-radius:inherit;
+      background:#020617;padding:8px;
+      display:flex;align-items:center;justify-content:center;
+    }
+    .logo{width:100%;height:100%;border-radius:50%;object-fit:cover;}
+    .brand-name{
+      font-size:clamp(1.5rem,3vw + .4rem,2.1rem);
+      font-weight:700;text-transform:uppercase;letter-spacing:.16em;
+      color:#f9fafb;
+      text-shadow:0 0 10px rgba(59,130,246,1),0 0 30px rgba(79,70,229,.9);
+    }
+
+    /* NAV */
+    nav{
+      display:flex;align-items:center;gap:.7rem;
+      font-size:.78rem;flex-wrap:wrap;
+    }
+    nav a{
+      position:relative;
+      padding:.4rem .9rem;border-radius:999px;
+      text-transform:uppercase;letter-spacing:.16em;
+      font-weight:600;color:#cbd5f5;
+      border:1px solid transparent;
+      transition:.2s color,.2s background,.2s box-shadow,.2s transform,.2s border-color;
+    }
+    nav a::before{
+      content:"";position:absolute;inset:0;border-radius:inherit;
+      border:1px solid rgba(148,163,184,.45);opacity:0;transition:.2s opacity;
+    }
+    nav a:hover{
+      color:#f9fafb;
+      background:radial-gradient(circle at top left,rgba(59,130,246,.35),rgba(15,23,42,.96));
+      box-shadow:0 0 18px rgba(59,130,246,.75);
+      transform:translateY(-1px);
+      border-color:rgba(59,130,246,.9);
+    }
+    nav a:hover::before{opacity:1;}
+
+    .ig-link{display:inline-flex;align-items:center;gap:.35rem;color:#f9a8d4;}
+    .ig-dot{
+      width:9px;height:9px;border-radius:50%;
+      background:radial-gradient(circle at 30% 30%,#facc15,#f97316,#ec4899,#6366f1);
+      box-shadow:0 0 10px rgba(236,72,153,.9);
+    }
+
+    /* ============ HERO PS5 ============ */
+    .hero{
+      padding:3rem 0 1.5rem;
+    }
+    .hero-title{
+      font-size:clamp(1.7rem,3vw + .4rem,2.2rem);
+      text-transform:uppercase;letter-spacing:.2em;
+      margin-bottom:.6rem;
+    }
+    .hero-sub{
+      font-size:.9rem;color:#9ca3af;
+    }
+
+    /* ============ CONTROLES CATÁLOGO ============ */
+    .catalog-controls{
+      padding-bottom:1rem;
+      display:flex;flex-wrap:wrap;
+      align-items:center;justify-content:space-between;
+      gap:1rem;
+    }
+    .badge-ps5{
+      padding:.25rem .7rem;border-radius:999px;
+      border:1px solid rgba(59,130,246,.9);
+      background:radial-gradient(circle at 0 0,rgba(59,130,246,.45),rgba(15,23,42,.96));
+      font-size:.72rem;text-transform:uppercase;letter-spacing:.16em;
+      color:#dbeafe;
+    }
+    .search-wrap{flex:1;min-width:220px;display:flex;justify-content:flex-end;}
+    #search{
+      width:100%;max-width:280px;
+      background:rgba(15,23,42,.9);
+      border-radius:999px;
+      border:1px solid #4b5563;
+      padding:.55rem .9rem;
+      font-size:.84rem;color:#e5e7eb;
+    }
+    #search::placeholder{color:#6b7280;}
+    #search:focus{outline:none;border-color:#38bdf8;box-shadow:0 0 0 1px #38bdf8;}
+
+    /* ============ SECCIONES CATÁLOGO ============ */
+    .section{padding:1rem 0 0;}
+    .section-header{
+      display:flex;flex-wrap:wrap;
+      align-items:center;justify-content:space-between;
+      gap:.4rem;margin-bottom:.6rem;
+    }
+    .section-header h2{
+      font-size:1.05rem;text-transform:uppercase;letter-spacing:.18em;
+    }
+    .section-header span{
+      font-size:.78rem;color:#9ca3af;
+    }
+    .empty-msg{
+      font-size:.84rem;color:#9ca3af;
+      font-style:italic;margin:.4rem 0 1rem;
+    }
+
+    .cards-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+      gap:1.3rem;
+    }
+
+    /* ============ CARD JUEGO (lo genera app-ps5.js) ============ */
+    .card{
+      background:radial-gradient(circle at top left,rgba(59,130,246,.35),rgba(15,23,42,.98));
+      border-radius:1rem;
+      border:1px solid rgba(59,130,246,.8);
+      box-shadow:0 22px 50px rgba(15,23,42,1);
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+    }
+    .card img{
+      width:100%;
+      aspect-ratio:16/9;
+      object-fit:cover;
+      background:#020617;
+      border-bottom:1px solid rgba(30,64,175,.9);
+      transition:.25s transform;
+    }
+    .card img:hover{transform:scale(1.02);}
+    .card .info{
+      padding:.85rem 1rem 1rem;
+      display:flex;
+      flex-direction:column;
+      gap:.45rem;
+    }
+    .card .title{
+      font-size:.96rem;
+      font-weight:600;
+      color:#e5e7eb;
+    }
+    .tags{
+      display:flex;flex-wrap:wrap;
+      gap:.25rem;
+      margin-bottom:.1rem;
+    }
+    .tag{
+      font-size:.7rem;
+      text-transform:uppercase;
+      letter-spacing:.14em;
+      padding:.15rem .5rem;
+      border-radius:999px;
+      border:1px solid rgba(148,163,184,.6);
+      background:rgba(15,23,42,.9);
+      color:#cbd5f5;
+    }
+    .items{
+      font-size:.8rem;
+      color:#d1d5db;
+    }
+    .price{
+      margin-top:.2rem;
+      font-size:.95rem;
+      font-weight:700;
+      color:#facc15;
+      text-shadow:0 0 12px rgba(250,204,21,.9);
+    }
+
+    .choice-list{
+      display:flex;
+      flex-wrap:wrap;
+      gap:.3rem;
+      margin-top:.2rem;
+    }
+    .choice{
+      font-size:.75rem;
+      padding:.18rem .55rem;
+      border-radius:999px;
+      border:1px solid rgba(148,163,184,.7);
+      background:rgba(15,23,42,.9);
+      cursor:pointer;
+      transition:.2s background,.2s border-color,.2s color,.2s box-shadow,.2s transform;
+    }
+    .choice:hover{
+      border-color:#38bdf8;
+      box-shadow:0 0 12px rgba(56,189,248,.9);
+      transform:translateY(-1px);
+    }
+    .choice.is-selected{
+      background:linear-gradient(135deg,#38bdf8,#6366f1);
+      border-color:#bfdbfe;
+      color:#f9fafb;
+      box-shadow:0 0 18px rgba(56,189,248,.95);
+    }
+
+    .card .btn.wa{
+      margin-top:.4rem;
+      width:100%;
+      justify-content:center;
+    }
+    .card .btn[disabled]{
+      opacity:.55;cursor:not-allowed;
+      box-shadow:none;
+    }
+
+    /* ============ BOTONES / WHATSAPP ============ */
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:.35rem;
+      padding:.6rem 1.2rem;
+      border-radius:999px;
+      font-weight:600;
+      text-transform:uppercase;
+      letter-spacing:.16em;
+      font-size:.78rem;
+      cursor:pointer;
+      border:1px solid transparent;
+      transition:.25s background,.25s border-color,.25s color,.25s box-shadow,.25s transform;
+    }
+    .btn.wa{
+      background:linear-gradient(135deg,#22c55e,#16a34a);
+      color:#f9fafb;
+      box-shadow:0 0 20px rgba(34,197,94,.9);
+    }
+    .btn.wa:hover{
+      transform:translateY(-2px);
+      box-shadow:0 0 26px rgba(34,197,94,1);
+      border-color:rgba(187,247,208,.85);
+    }
+
+    .cta-strip{
+      padding:1.2rem 0 0;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      gap:.6rem;
+      font-size:.86rem;
+      color:#d1d5db;
+    }
+
+    .wa-fab{
+      position:fixed;
+      right:1.4rem;
+      bottom:1.4rem;
+      width:3.2rem;
+      height:3.2rem;
+      border-radius:999px;
+      background:linear-gradient(135deg,#22c55e,#16a34a);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:#f9fafb;
+      font-size:1.4rem;
+      box-shadow:0 0 22px rgba(34,197,94,1);
+      z-index:60;
+      transition:.25s transform,.25s box-shadow;
+    }
+    .wa-fab:hover{
+      transform:translateY(-2px) scale(1.03);
+      box-shadow:0 0 30px rgba(34,197,94,1);
+    }
+
+    /* ============ LIGHTBOX (la usa app-ps5.js) ============ */
+    .lightbox{
+      position:fixed;inset:0;
+      background:rgba(15,23,42,.92);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:1.5rem;
+      z-index:80;
+    }
+    .lightbox.open{display:flex;}
+    .lightbox img{
+      max-width:min(100%,900px);
+      max-height:90vh;
+      border-radius:1rem;
+      background:#020617;
+      box-shadow:0 30px 80px rgba(0,0,0,1);
+      object-fit:contain;
+    }
+    .lb-close{
+      position:absolute;
+      top:1.2rem;right:1.2rem;
+      width:2.2rem;height:2.2rem;
+      border-radius:999px;
+      border:none;
+      background:rgba(15,23,42,.9);
+      color:#e5e7eb;
+      font-size:1.1rem;
+      cursor:pointer;
+      box-shadow:0 0 15px rgba(148,163,184,.9);
+    }
+
+    /* ============ FOOTER ============ */
+    .footer{
+      margin-top:3rem;
+      background:rgba(2,6,23,.97);
+      border-top:1px solid rgba(30,64,175,.8);
+    }
+    .footer-grid{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:1rem;
+      padding:1rem 0;
+      font-size:.78rem;
+      color:#6b7280;
+    }
+
+    /* ============ RESPONSIVE ============ */
+    @media (max-width:768px){
+      .brand{flex-wrap:wrap;}
+      .logo-ring-outer{width:76px;height:76px;}
+      .brand-name{flex:1;text-align:left;font-size:1.4rem;}
+      nav{width:100%;justify-content:flex-start;}
+      .hero{padding-top:2.3rem;}
+      body{padding-bottom:4rem;} /* espacio FAB */
+    }
+  </style>
+</head>
+
+<body>
+  <header class="top">
+    <div class="wrap brand">
+      <div class="logo-ring-outer">
+        <div class="logo-ring-inner">
+          <img src="img/logo.png" alt="Zona Gamer" class="logo" />
+        </div>
+      </div>
+      <h1 class="brand-name">Zona Gamer</h1>
+      <nav>
+        <a href="index.html">Inicio</a>
+        <a href="ps4.html">PS4</a>
+        <a href="ps5.html">PS5</a>
+        <a class="ig-link" href="https://www.instagram.com/zonagamersvup?igsh=MXd2ZHNxbnZsYjU5aA==" target="_blank" rel="noopener">
+          <span class="ig-dot"></span> Instagram
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="wrap hero">
+      <div class="hero-title">Catálogo digital PS5</div>
+      <p class="hero-sub">Juegos y combos digitales para PlayStation 5 – instalación remota, rápida y segura.</p>
+    </section>
+
+    <section class="wrap catalog-controls">
+      <span class="badge-ps5">Zona PS5</span>
+      <div class="search-wrap">
+        <input id="search" placeholder="Buscar juego o combo..." />
+      </div>
+    </section>
+
+    <section class="wrap section">
+      <div class="section-header">
+        <h2>Individuales</h2>
+        <span>Juegos sueltos para PS5</span>
+      </div>
+      <p id="empty-individual" class="empty-msg" hidden>No hay individuales disponibles.</p>
+      <div id="grid-individual" class="cards-grid"></div>
+    </section>
+
+    <section class="wrap section">
+      <div class="section-header">
+        <h2>Nuevos combos</h2>
+        <span>Combos nuevos y en promoción</span>
+      </div>
+      <p id="empty-combos-new" class="empty-msg" hidden>No hay combos nuevos.</p>
+      <div id="grid-combos-new" class="cards-grid"></div>
+    </section>
+
+    <section class="wrap section">
+      <div class="section-header">
+        <h2>Todos los combos</h2>
+        <span>Combos clásicos y packs especiales</span>
+      </div>
+      <p id="empty-combos-old" class="empty-msg" hidden>No hay combos disponibles.</p>
+      <div id="grid-combos-old" class="cards-grid"></div>
+    </section>
+
+    <section class="wrap cta-strip">
+      <p>¿Listo para pedir en PS5? Escríbeme y te confirmo precio, disponibilidad y tiempo de instalación.</p>
+      <a id="cta-wa" class="btn wa" target="_blank" rel="noopener">Pedir por WhatsApp</a>
+    </section>
+  </main>
+
+  <a id="wa-fab" class="wa-fab" href="#" target="_blank" title="Chatea por WhatsApp">💬</a>
+
+  <footer class="footer">
+    <div class="wrap footer-grid">
+      <small>© <span id="year"></span> Zona Gamer — Colombia</small>
+      <div class="socials">
+        <a class="ig-link" href="https://www.instagram.com/zonagamersvup?igsh=MXd2ZHNxbnZsYjU5aA==" target="_blank" rel="noopener">
+          <span class="ig-dot"></span> @zonagamersvup
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Primero el catálogo, luego la app -->
+  <script src="products.js"></script>
+  <script src="app-ps5.js"></script>
+</body>
+</html>
